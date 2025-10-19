@@ -1,0 +1,22 @@
+{
+  "required": false,
+  "package": "com.evolution.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "evolution.refmap.json",
+  "mixinPriority": 200,
+  "mixins": [
+    "AnimalFoodMixin",
+    "EntityDespawnMixin",
+    "EntityTraitStorageMixin",
+    "EternalYouthAgeMixin",
+    "MagicalDamageMixin",
+    "SunBurnMixin",
+    "VillagerBreedMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  },
+  "minVersion": "0.8"
+}
