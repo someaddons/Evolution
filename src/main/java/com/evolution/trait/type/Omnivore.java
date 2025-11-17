@@ -22,7 +22,7 @@ import net.minecraft.world.level.Level;
  */
 public class Omnivore implements ITraitType
 {
-    public static final ResourceLocation      ID         = new ResourceLocation(Evolution.MOD_ID, "omnivore");
+    public static final ResourceLocation      ID         = ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID, "omnivore");
     final               TagKey<EntityType<?>>         compatible = TagKey.create(Registries.ENTITY_TYPE, ID);
     public static final               TagKey<Item> foodItems = TagKey.create(Registries.ITEM, ID);
 

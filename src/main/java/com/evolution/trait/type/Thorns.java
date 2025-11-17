@@ -16,7 +16,7 @@ import net.minecraft.world.level.Level;
  */
 public class Thorns implements ITraitType
 {
-    public static final ResourceLocation      ID         = new ResourceLocation(Evolution.MOD_ID, "thorns");
+    public static final ResourceLocation      ID         = ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID, "thorns");
     final               TagKey<EntityType<?>> compatible = TagKey.create(Registries.ENTITY_TYPE, ID);
 
     /**

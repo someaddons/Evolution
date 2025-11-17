@@ -284,15 +284,15 @@ public class EntityTraitManager
             {
                 if (parentFrog.getVariant() == FrogVariant.COLD)
                 {
-                    childFrog.setVariant(FrogVariant.TEMPERATE);
+                    childFrog.setVariant(parentA.level().registryAccess().registry(Registries.FROG_VARIANT).get().getHolder(FrogVariant.TEMPERATE).get());
                 }
                 if (parentFrog.getVariant() == FrogVariant.TEMPERATE)
                 {
-                    childFrog.setVariant(FrogVariant.WARM);
+                    childFrog.setVariant(parentA.level().registryAccess().registry(Registries.FROG_VARIANT).get().getHolder(FrogVariant.WARM).get());
                 }
                 if (parentFrog.getVariant() == FrogVariant.WARM)
                 {
-                    childFrog.setVariant(FrogVariant.COLD);
+                    childFrog.setVariant(parentA.level().registryAccess().registry(Registries.FROG_VARIANT).get().getHolder(FrogVariant.COLD).get());
                 }
             }
 
@@ -313,7 +313,7 @@ public class EntityTraitManager
             {
                 var catVariantRegistry = parentA.level().registryAccess().registry(Registries.CAT_VARIANT).get();
                 Object[] variantIDs = catVariantRegistry.keySet().toArray();
-                catChild.setVariant(catVariantRegistry.get((ResourceLocation) variantIDs[Evolution.rand.nextInt(variantIDs.length)]));
+                catChild.setVariant(catVariantRegistry.getHolder((ResourceLocation) variantIDs[Evolution.rand.nextInt(variantIDs.length)]).get());
             }
 
             // Fox children random color
@@ -342,7 +342,7 @@ public class EntityTraitManager
                 }
 
                 witch.moveTo(parentA.getX(), parentA.getY(), parentA.getZ());
-                witch.finalizeSpawn((ServerLevelAccessor) parentA.level(), parentA.level().getCurrentDifficultyAt(parentA.blockPosition()), MobSpawnType.BREEDING, null, null);
+                witch.finalizeSpawn((ServerLevelAccessor) parentA.level(), parentA.level().getCurrentDifficultyAt(parentA.blockPosition()), MobSpawnType.BREEDING, null);
                 parentA.level().addFreshEntity(witch);
                 child = (T) witch;
             }

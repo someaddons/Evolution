@@ -3,6 +3,7 @@ package com.evolution.trait.storage;
 import com.evolution.trait.type.ITraitType;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.saveddata.SavedData;
 public class TraitRegionLevelData extends SavedData
 {
     public static final String ID = "evolutionmoddata";
+    public static SavedData.Factory<TraitRegionLevelData> LEVELDATAFACTORY = new SavedData.Factory<>(TraitRegionLevelData::new, TraitRegionLevelData::load);
 
     /**
      * Chunk section position to structure data matching map, multiple positions can point to the same structure
@@ -31,7 +33,7 @@ public class TraitRegionLevelData extends SavedData
      */
     public static TraitStats getTraitData(final ServerLevel level, final BlockPos pos, final ITraitType traitType)
     {
-        final TraitRegionLevelData respawnData = level.getDataStorage().computeIfAbsent(TraitRegionLevelData::load, TraitRegionLevelData::new, TraitRegionLevelData.ID);
+        final TraitRegionLevelData respawnData = level.getDataStorage().computeIfAbsent(LEVELDATAFACTORY, TraitRegionLevelData.ID);
         return respawnData.getForPos(pos).getTraitDataFor(traitType);
     }
 
@@ -40,11 +42,11 @@ public class TraitRegionLevelData extends SavedData
      */
     public static TraitRegionLevelData getTraitRegionLevelData(final ServerLevel level)
     {
-        final TraitRegionLevelData respawnData = level.getDataStorage().computeIfAbsent(TraitRegionLevelData::load, TraitRegionLevelData::new, TraitRegionLevelData.ID);
+        final TraitRegionLevelData respawnData = level.getDataStorage().computeIfAbsent(LEVELDATAFACTORY, TraitRegionLevelData.ID);
         return respawnData;
     }
 
-    private static TraitRegionLevelData load(CompoundTag compoundTag)
+    private static TraitRegionLevelData load(CompoundTag compoundTag, HolderLookup.Provider provider)
     {
         TraitRegionLevelData data = new TraitRegionLevelData();
         data.read(compoundTag);
@@ -108,7 +110,7 @@ public class TraitRegionLevelData extends SavedData
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag)
+    public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider)
     {
         tag.putLong("elapsedTime", elapsedTime);
 

@@ -4,7 +4,6 @@ import com.evolution.config.CommonConfiguration;
 import com.evolution.trait.ITrait;
 import com.evolution.trait.storage.ITraitEntity;
 import com.evolution.trait.type.ITraitType;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Mob;
 import snownee.jade.api.*;
@@ -46,7 +45,7 @@ public class JadeCompat implements IWailaPlugin
                 }
             }
 
-            final ResourceLocation ID = new ResourceLocation("evolution:jade");
+            final ResourceLocation ID = ResourceLocation.tryParse("evolution:jade");
 
             @Override
             public ResourceLocation getUid()

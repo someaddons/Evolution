@@ -9,6 +9,7 @@
     "EntityDespawnMixin",
     "EntityTraitStorageMixin",
     "EternalYouthAgeMixin",
+    "LootMixin",
     "MagicalDamageMixin",
     "SunBurnMixin",
     "VillagerBreedMixin"

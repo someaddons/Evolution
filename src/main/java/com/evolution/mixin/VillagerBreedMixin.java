@@ -28,7 +28,7 @@ public abstract class VillagerBreedMixin extends AbstractVillager
     }
 
     @Inject(method = "getBreedOffspring(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/AgeableMob;)Lnet/minecraft/world/entity/npc/Villager;",
-        at = @At(value = "INVOKE", target = "Lnet/minecraftforge/event/ForgeEventFactory;onFinalizeSpawn(Lnet/minecraft/world/entity/Mob;Lnet/minecraft/world/level/ServerLevelAccessor;Lnet/minecraft/world/DifficultyInstance;Lnet/minecraft/world/entity/MobSpawnType;Lnet/minecraft/world/entity/SpawnGroupData;Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/world/entity/SpawnGroupData;", remap = false), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/Villager;finalizeSpawn(Lnet/minecraft/world/level/ServerLevelAccessor;Lnet/minecraft/world/DifficultyInstance;Lnet/minecraft/world/entity/MobSpawnType;Lnet/minecraft/world/entity/SpawnGroupData;)Lnet/minecraft/world/entity/SpawnGroupData;", remap = false), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
     private void onVillagerBreed(final ServerLevel p_150012_, final AgeableMob other, final CallbackInfoReturnable<Villager> cir, double d0, VillagerType type, Villager child)
     {
         final AgeableMob result = EntityTraitManager.onAnimalBreed((Mob & ITraitEntity) (Object) this, (Mob & ITraitEntity) other, (Mob & ITraitEntity) child);

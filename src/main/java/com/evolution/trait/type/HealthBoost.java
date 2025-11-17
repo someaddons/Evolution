@@ -21,12 +21,12 @@ import net.minecraft.world.level.Level;
  */
 public class HealthBoost implements ITraitType
 {
-    public static final ResourceLocation      ID         = new ResourceLocation(Evolution.MOD_ID, "healthy");
+    public static final ResourceLocation      ID         = ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID, "healthy");
     final               TagKey<EntityType<?>> compatible = TagKey.create(Registries.ENTITY_TYPE, ID);
 
-    private static AttributeModifier MAX_HP_MOD_ONE   = new AttributeModifier("evolution_healthboost", 0.2, AttributeModifier.Operation.MULTIPLY_TOTAL);
-    private static AttributeModifier MAX_HP_MOD_TWO   = new AttributeModifier("evolution_healthboost", 0.5, AttributeModifier.Operation.MULTIPLY_TOTAL);
-    private static AttributeModifier MAX_HP_MOD_THREE = new AttributeModifier("evolution_healthboost", 1.5, AttributeModifier.Operation.MULTIPLY_TOTAL);
+    private static AttributeModifier MAX_HP_MOD_ONE   = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID,"healthboost"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+    private static AttributeModifier MAX_HP_MOD_TWO   = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID,"healthboost"), 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+    private static AttributeModifier MAX_HP_MOD_THREE = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID,"healthboost"), 1.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 
     /**
      * Appareance chance

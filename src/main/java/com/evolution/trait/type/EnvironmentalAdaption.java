@@ -16,7 +16,7 @@ import net.minecraft.world.level.Level;
  */
 public class EnvironmentalAdaption implements ITraitType
 {
-    public static final ResourceLocation      ID         = new ResourceLocation(Evolution.MOD_ID, "envadapt");
+    public static final ResourceLocation      ID         = ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID, "envadapt");
     final               TagKey<EntityType<?>> compatible = TagKey.create(Registries.ENTITY_TYPE, ID);
 
     /**

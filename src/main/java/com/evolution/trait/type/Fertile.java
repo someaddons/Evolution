@@ -21,7 +21,7 @@ import net.minecraft.world.level.Level;
  */
 public class Fertile implements ITraitType
 {
-    public static final ResourceLocation      ID         = new ResourceLocation(Evolution.MOD_ID, "fertile");
+    public static final ResourceLocation      ID         = ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID, "fertile");
     final               TagKey<EntityType<?>> compatible = TagKey.create(Registries.ENTITY_TYPE, ID);
 
 

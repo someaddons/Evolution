@@ -45,7 +45,13 @@ public class MutantLayer<T extends LivingEntity, M extends EntityModel<T>>
         entitymodel.prepareMobModel(entity, p_116974_, p_116975_, p_116976_);
         VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.energySwirl(POWER_LOCATION, this.xOffset(f) % 1.0F, f * 0.01F % 1.0F));
         entitymodel.setupAnim(entity, p_116974_, p_116975_, p_116977_, p_116978_, p_116979_);
-        entitymodel.renderToBuffer(poseStack, vertexconsumer, p_116972_, OverlayTexture.NO_OVERLAY, 1.0F, 0.2F, 0.1F, 0.11F);
+
+        int color = ((int) (0.11F * 255) << 24) |   // alpha
+            ((int) (1.0F * 255) << 16) |   // red
+            ((int) (0.2F * 255) << 8) |   // green
+            ((int) (0.1F * 255));          // blue
+
+        entitymodel.renderToBuffer(poseStack, vertexconsumer, p_116972_, OverlayTexture.NO_OVERLAY, color);
     }
 
     protected float xOffset(float p_116683_)
@@ -53,5 +59,5 @@ public class MutantLayer<T extends LivingEntity, M extends EntityModel<T>>
         return p_116683_ * 0.001F;
     }
 
-    private static final ResourceLocation POWER_LOCATION = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
+    private static final ResourceLocation POWER_LOCATION = ResourceLocation.tryParse("textures/entity/creeper/creeper_armor.png");
 }

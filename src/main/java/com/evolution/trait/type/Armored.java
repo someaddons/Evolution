@@ -25,11 +25,11 @@ import org.w3c.dom.Attr;
  */
 public class Armored implements ITraitType
 {
-    public static final ResourceLocation      ID         = new ResourceLocation(Evolution.MOD_ID, "armored");
+    public static final ResourceLocation      ID         = ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID, "armored");
     final               TagKey<EntityType<?>> compatible = TagKey.create(Registries.ENTITY_TYPE, ID);
 
-    private static AttributeModifier ARMORED_ONE = new AttributeModifier("evolution_armored", 4, AttributeModifier.Operation.ADDITION);
-    private static AttributeModifier ARMORED_TWO = new AttributeModifier("evolution_armored", 8, AttributeModifier.Operation.ADDITION);
+    private static AttributeModifier ARMORED_ONE = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID,"armored"), 4, AttributeModifier.Operation.ADD_VALUE);
+    private static AttributeModifier ARMORED_TWO = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID,"armored"), 8, AttributeModifier.Operation.ADD_VALUE);
 
     /**
      * Appareance chance

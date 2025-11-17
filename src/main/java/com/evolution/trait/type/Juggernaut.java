@@ -23,11 +23,11 @@ import net.minecraft.world.level.Level;
  */
 public class Juggernaut implements ITraitType
 {
-    public static final ResourceLocation      ID         = new ResourceLocation(Evolution.MOD_ID, "juggernaut");
+    public static final ResourceLocation      ID         = ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID, "juggernaut");
     final               TagKey<EntityType<?>> compatible = TagKey.create(Registries.ENTITY_TYPE, ID);
 
-    private static AttributeModifier KNOCKBACK_IMMUNE = new AttributeModifier("evolution_juggernaut", 1, AttributeModifier.Operation.ADDITION);
-    private static AttributeModifier SLOWER = new AttributeModifier("evolution_juggernaut_speed", -0.2, AttributeModifier.Operation.MULTIPLY_TOTAL);
+    private static AttributeModifier KNOCKBACK_IMMUNE = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID,"juggernaut"), 1, AttributeModifier.Operation.ADD_VALUE);
+    private static AttributeModifier SLOWER = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID,"juggernaut_speed"), -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 
     /**
      * Appareance chance

@@ -4,6 +4,7 @@ import com.evolution.Evolution;
 import com.evolution.trait.ITrait;
 import com.evolution.trait.storage.ITraitEntity;
 import com.google.gson.JsonElement;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -26,9 +27,9 @@ import java.util.UUID;
  */
 public class Mutant implements ITraitType
 {
-    public static final ResourceLocation      ID         = new ResourceLocation(Evolution.MOD_ID, "mutant");
+    public static final ResourceLocation      ID         = ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID, "mutant");
     final          TagKey<EntityType<?>> compatible     = TagKey.create(Registries.ENTITY_TYPE, ID);
-    private static AttributeModifier     BOOST_ALL_TEN = new AttributeModifier("evolution_mutant", 0.1, AttributeModifier.Operation.MULTIPLY_TOTAL);
+    private static AttributeModifier     BOOST_ALL_TEN = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID,"mutant"), 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 
     /**
      * Appareance chance
@@ -80,9 +81,9 @@ public class Mutant implements ITraitType
     {
         entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, -1, 1, true, true));
 
-        for(final Attribute attribute: entity.getAttributes().attributes.keySet())
+        for(final Holder<Attribute> attribute: entity.getAttributes().attributes.keySet())
         {
-            entity.getAttribute(attribute).addTransientModifier(new AttributeModifier(UUID.randomUUID(),"mutant", 0.1, AttributeModifier.Operation.MULTIPLY_TOTAL));
+            entity.getAttribute(attribute).addTransientModifier(new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID,""+ attribute.hashCode()), 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         }
     }
 

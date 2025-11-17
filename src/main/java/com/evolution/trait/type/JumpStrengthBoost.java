@@ -22,11 +22,11 @@ import net.minecraft.world.level.Level;
  */
 public class JumpStrengthBoost implements ITraitType
 {
-    public static final ResourceLocation      ID         = new ResourceLocation(Evolution.MOD_ID, "leaper");
+    public static final ResourceLocation      ID         = ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID, "leaper");
     final               TagKey<EntityType<?>> compatible = TagKey.create(Registries.ENTITY_TYPE, ID);
 
-    private static AttributeModifier SPEED_ONE = new AttributeModifier("evolution_leaper", 0.2, AttributeModifier.Operation.MULTIPLY_TOTAL);
-    private static AttributeModifier SPEED_TWO = new AttributeModifier("evolution_leaper", 0.35, AttributeModifier.Operation.MULTIPLY_TOTAL);
+    private static AttributeModifier SPEED_ONE = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID,"leaper"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+    private static AttributeModifier SPEED_TWO = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID,"leaper"), 0.35, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 
     /**
      * Appareance chance

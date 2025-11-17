@@ -3,12 +3,11 @@ package com.evolution.trait;
 import com.evolution.Evolution;
 import com.evolution.config.CommonConfiguration;
 import com.evolution.trait.type.*;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 
@@ -132,7 +131,7 @@ public class Traits
         {
             types = new ArrayList<>();
 
-            if (!CommonConfiguration.config.getCommonConfig().entityBlackList.contains(ForgeRegistries.ENTITY_TYPES.getKey(type).toString()))
+            if (!CommonConfiguration.config.getCommonConfig().entityBlackList.contains(level.registryAccess().registry(Registries.ENTITY_TYPE).get().getKey(type).toString()))
             {
                 for (final ITraitType traitType : registeredTraits.values())
                 {

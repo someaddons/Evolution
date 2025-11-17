@@ -21,11 +21,11 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.living.*;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.*;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
@@ -35,12 +35,6 @@ import java.util.Calendar;
  */
 public class EventHandler
 {
-    @SubscribeEvent
-    public static void onLootTableLoad(@NotNull final LootingLevelEvent event)
-    {
-        event.setLootingLevel(event.getLootingLevel() + EntityTraitManager.getLootingLevelBonus(event.getEntity()));
-    }
-
     @SubscribeEvent
     public static void onEntitySpawn(@NotNull final EntityJoinLevelEvent event)
     {
@@ -55,7 +49,7 @@ public class EventHandler
     private static long lastTime = 0;
 
     @SubscribeEvent
-    public static void onServerTick(final TickEvent.ServerTickEvent event)
+    public static void onServerTick(final ServerTickEvent.Post event)
     {
         if (event.getServer().getTickCount() % 100 == 35)
         {
@@ -82,7 +76,7 @@ public class EventHandler
     }
 
     @SubscribeEvent
-    public static void onMobAttackLiving(final LivingAttackEvent event)
+    public static void onMobAttackLiving(final LivingIncomingDamageEvent event)
     {
         if (event.getEntity().level().isClientSide())
         {
@@ -97,11 +91,11 @@ public class EventHandler
     }
 
     @SubscribeEvent
-    public static void onMobAttacking(final LivingHurtEvent event)
+    public static void onMobAttacking(final LivingDamageEvent.Pre event)
     {
         if (event.getSource().getEntity() instanceof ITraitEntity traitEntity && traitEntity.hasTrait(Traits.damageBoost))
         {
-            event.setAmount(event.getAmount() * (1.0f + 0.2f * traitEntity.getTraits().get(Traits.damageBoost).getLevel()));
+            event.setNewDamage(event.getNewDamage() * (1.0f + 0.2f * traitEntity.getTraits().get(Traits.damageBoost).getLevel()));
         }
 
         if (event.getEntity() instanceof ITraitEntity traitEntity && traitEntity.hasTrait(Traits.mutant))
@@ -119,29 +113,29 @@ public class EventHandler
             final float maxHealth = event.getEntity().getMaxHealth();
             final float allowedPercent = 0.45f - traitEntity.getTraits().get(Traits.enduring).getLevel() * 0.1f; // 35% 25% 15%
             final float allowedTotal = allowedPercent * maxHealth;
-            event.setAmount(Math.min(allowedTotal, event.getAmount()));
+            event.setNewDamage(Math.min(allowedTotal, event.getNewDamage()));
         }
     }
 
-    private static TagKey<DamageType> MELEE_DAMAGE = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Evolution.MOD_ID, "meleedamagetypes"));
+    private static TagKey<DamageType> MELEE_DAMAGE = TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID, "meleedamagetypes"));
 
     @SubscribeEvent
-    public static void onMobAttacked(final LivingDamageEvent event)
+    public static void onMobAttacked(final LivingDamageEvent.Pre event)
     {
         if (event.getSource().getDirectEntity() instanceof Projectile
             && event.getEntity() instanceof ITraitEntity traitEntity && traitEntity.hasTrait(Traits.projectileProtection))
         {
-            event.setAmount(event.getAmount() * (1.0f - (0.45f * traitEntity.getTraits().get(Traits.projectileProtection).getLevel())));
+            event.setNewDamage(event.getNewDamage() * (1.0f - (0.45f * traitEntity.getTraits().get(Traits.projectileProtection).getLevel())));
         }
         else if (event.getSource().is(MELEE_DAMAGE) && event.getEntity() instanceof ITraitEntity traitEntity && traitEntity.hasTrait(Traits.meleeProtection))
         {
-            event.setAmount(event.getAmount() * (1.0f - (0.25f * traitEntity.getTraits().get(Traits.meleeProtection).getLevel())));
+            event.setNewDamage(event.getNewDamage() * (1.0f - (0.25f * traitEntity.getTraits().get(Traits.meleeProtection).getLevel())));
         }
 
         if (event.getSource().getDirectEntity() == null
             && event.getEntity() instanceof ITraitEntity traitEntity && traitEntity.hasTrait(Traits.environmentalAdaption))
         {
-            event.setAmount(event.getAmount() * (1.0f - (0.5f * traitEntity.getTraits().get(Traits.environmentalAdaption).getLevel())));
+            event.setNewDamage(event.getNewDamage() * (1.0f - (0.5f * traitEntity.getTraits().get(Traits.environmentalAdaption).getLevel())));
         }
 
         if (event.getSource().getEntity() instanceof LivingEntity
@@ -192,7 +186,7 @@ public class EventHandler
             return;
         }
 
-        if (event.getEntity() instanceof ITraitEntity traitEntity && event.getNewTarget() instanceof ServerPlayer)
+        if (event.getEntity() instanceof ITraitEntity traitEntity && event.getNewAboutToBeSetTarget() instanceof ServerPlayer)
         {
             traitEntity.onPlayerContact(event.getEntity().tickCount);
         }
