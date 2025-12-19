@@ -1,0 +1,4 @@
+{
+  "desc": "Entities with this trait ignore armor when dealing damage",
+  "weight": 2
+}

@@ -3,6 +3,7 @@ package com.evolution.trait.type;
 import com.evolution.Evolution;
 import com.evolution.trait.ITrait;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -32,9 +33,9 @@ public class Explosive implements ITraitType
     }
 
     @Override
-    public void loadFromJson(final JsonElement data)
+    public void loadFromJson(final JsonObject data)
     {
-        // TODO: load data settings from json
+        chance = data.get("weight").getAsInt();
     }
 
     @Override

@@ -1,0 +1,10 @@
+{
+  "desc": "Limits how much percent hp an entity can loose from environmental damage",
+  "maxlevel": 2,
+  "weight": 7,
+  "envhppercentlostlevels":
+  {
+    "1": 50,
+    "2": 0
+  }
+}

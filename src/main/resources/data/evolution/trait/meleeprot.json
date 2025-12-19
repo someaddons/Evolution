@@ -1,0 +1,11 @@
+{
+  "desc": "Reduces damage taken from melee attacks",
+  "maxlevel": 3,
+  "weight": 8,
+  "percentDamageReductionlevels":
+  {
+    "1": 25,
+    "2": 50,
+    "3": 75
+  }
+}

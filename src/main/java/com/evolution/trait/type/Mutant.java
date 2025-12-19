@@ -3,8 +3,11 @@ package com.evolution.trait.type;
 import com.evolution.Evolution;
 import com.evolution.trait.ITrait;
 import com.evolution.trait.storage.ITraitEntity;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import net.minecraft.core.Holder;
+import com.google.gson.JsonObject;
+import com.ibm.icu.impl.ValidIdentifiers;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -20,6 +23,9 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.level.Level;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -34,7 +40,8 @@ public class Mutant implements ITraitType
     /**
      * Appareance chance
      **/
-    private int chance = 1;
+    private int         chance    = 1;
+    private Set<String> blackList = new HashSet<>();
 
     public Mutant()
     {
@@ -42,9 +49,15 @@ public class Mutant implements ITraitType
     }
 
     @Override
-    public void loadFromJson(final JsonElement data)
+    public void loadFromJson(final JsonObject data)
     {
-        // TODO: load data settings from json
+        chance = data.get("weight").getAsInt();
+        blackList.clear();
+        JsonArray traitblacklist = data.get("traitblacklist").getAsJsonArray();
+        for(final JsonElement element: traitblacklist)
+        {
+            blackList.add(element.getAsString());
+        }
     }
 
     @Override
@@ -97,5 +110,10 @@ public class Mutant implements ITraitType
     public Component getDisplayName(ITrait trait)
     {
         return Component.translatable("evolution.trait.mutant", ITraitType.levelToString(trait.getLevel()));
+    }
+
+    public boolean isBlackListed(final ITraitType iTraitType)
+    {
+        return blackList.contains(iTraitType.getID().toString());
     }
 }

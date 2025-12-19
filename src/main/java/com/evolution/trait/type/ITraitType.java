@@ -5,6 +5,7 @@ import com.evolution.trait.DefaultTraitData;
 import com.evolution.trait.ITrait;
 import com.evolution.trait.storage.ITraitEntity;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -52,7 +53,7 @@ public interface ITraitType
      *
      * @param data
      */
-    public void loadFromJson(final JsonElement data);
+    public void loadFromJson(final JsonObject data);
 
     /**
      * ID of the trait type

@@ -1,0 +1,10 @@
+{
+  "desc": "Gives additional armor to the entity",
+  "maxlevel": 2,
+  "weight": 6,
+  "armorlevels":
+  {
+    "1": 4,
+    "2": 8
+  }
+}

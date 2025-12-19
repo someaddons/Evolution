@@ -1,0 +1,11 @@
+{
+  "desc": "Hurts attacking entities when hit",
+  "maxlevel": 3,
+  "weight": 3,
+  "damageLevels":
+  {
+    "1": 1,
+    "2": 3,
+    "3": 5
+  }
+}

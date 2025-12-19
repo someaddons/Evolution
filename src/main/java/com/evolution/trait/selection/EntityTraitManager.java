@@ -137,6 +137,11 @@ public class EntityTraitManager
             if (mutant)
             {
                 selected = Evolution.rand.nextInt(traitWeights.length);
+
+                for (int j = 0; j < 50 && selected != traitWeights.length - 1 && Traits.mutant.isBlackListed(entityTraitTypes.get(selected)); j++)
+                {
+                    selected = Evolution.rand.nextInt(traitWeights.length);
+                }
             }
             else
             {
@@ -392,7 +397,7 @@ public class EntityTraitManager
         if (child instanceof AgeableMob)
         {
             // Randomly add eternal youth 5%
-            if (Evolution.rand.nextInt(100) <= 5)
+            if (Evolution.rand.nextInt(100) <= Traits.eternalYouth.getActualChance())
             {
                 child.addTraitType(Traits.eternalYouth);
                 ((AgeableMob) child).setAge(Integer.MIN_VALUE);

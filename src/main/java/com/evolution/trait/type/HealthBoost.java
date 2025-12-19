@@ -4,6 +4,8 @@ import com.evolution.Evolution;
 import com.evolution.trait.ITrait;
 import com.evolution.trait.storage.ITraitEntity;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -16,6 +18,8 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.level.Level;
 
+import java.util.Map;
+
 /**
  * Trait which increase the dropped loot
  */
@@ -24,9 +28,15 @@ public class HealthBoost implements ITraitType
     public static final ResourceLocation      ID         = ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID, "healthy");
     final               TagKey<EntityType<?>> compatible = TagKey.create(Registries.ENTITY_TYPE, ID);
 
-    private static AttributeModifier MAX_HP_MOD_ONE   = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID,"healthboost"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
-    private static AttributeModifier MAX_HP_MOD_TWO   = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID,"healthboost"), 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
-    private static AttributeModifier MAX_HP_MOD_THREE = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID,"healthboost"), 1.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+    /**
+     * The attribute modifiers by level
+     */
+    private Int2ObjectOpenHashMap<AttributeModifier> modifiers = new Int2ObjectOpenHashMap<>();
+
+    /**
+     * The maximum level
+     */
+    private int                                      maxLevel  = 3;
 
     /**
      * Appareance chance
@@ -35,13 +45,22 @@ public class HealthBoost implements ITraitType
 
     public HealthBoost()
     {
-
+        modifiers.put(1, new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID,"healthboost"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        modifiers.put(2, new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID,"healthboost"), 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        modifiers.put(3, new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID,"healthboost"), 1.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
     }
 
     @Override
-    public void loadFromJson(final JsonElement data)
+    public void loadFromJson(final JsonObject data)
     {
-        // TODO: load data settings from json
+        maxLevel = data.get("maxlevel").getAsInt();
+        chance = data.get("weight").getAsInt();
+        JsonObject levels = data.get("healthLevels").getAsJsonObject();
+        modifiers.clear();
+        for (final Map.Entry<String, JsonElement> level : levels.entrySet())
+        {
+            modifiers.put(Integer.valueOf(level.getKey()), new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Evolution.MOD_ID,"healthboost"), level.getValue().getAsDouble() / 100.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        }
     }
 
     @Override
@@ -76,29 +95,18 @@ public class HealthBoost implements ITraitType
     @Override
     public int maxLevel()
     {
-        return 3;
+        return maxLevel;
     }
 
     @Override
     public <T extends Mob & ITraitEntity> void onAddTo(T entity, ITrait iTrait)
     {
         float healthPercent = entity.getHealth() / entity.getMaxHealth();
-        entity.getAttribute(Attributes.MAX_HEALTH).removeModifier(MAX_HP_MOD_ONE);
-        entity.getAttribute(Attributes.MAX_HEALTH).removeModifier(MAX_HP_MOD_TWO);
-        entity.getAttribute(Attributes.MAX_HEALTH).removeModifier(MAX_HP_MOD_THREE);
-
-        if (iTrait.getLevel() == 1)
+        for (final var modifier : modifiers.values())
         {
-            entity.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(MAX_HP_MOD_ONE);
+            entity.getAttribute(Attributes.MAX_HEALTH).removeModifier(modifier);
         }
-        if (iTrait.getLevel() == 2)
-        {
-            entity.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(MAX_HP_MOD_TWO);
-        }
-        if (iTrait.getLevel() == 3)
-        {
-            entity.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(MAX_HP_MOD_THREE);
-        }
+        entity.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(modifiers.get(iTrait.getLevel()));
 
         entity.setHealth(entity.getMaxHealth() * healthPercent);
     }

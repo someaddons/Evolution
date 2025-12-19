@@ -1,0 +1,10 @@
+{
+  "desc": "Allows an entity to jump higher, values in percent",
+  "maxlevel": 2,
+  "weight": 7,
+  "jumplevels":
+  {
+    "1": 20,
+    "2": 35
+  }
+}

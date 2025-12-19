@@ -1,0 +1,5 @@
+{
+  "desc": "Gives villagers a discount on their prices one emerald per level, never reduces the cost below 2",
+  "maxlevel": 2,
+  "weight": 2
+}

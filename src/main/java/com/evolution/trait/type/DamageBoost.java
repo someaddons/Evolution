@@ -3,13 +3,18 @@ package com.evolution.trait.type;
 import com.evolution.Evolution;
 import com.evolution.trait.ITrait;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.level.Level;
+
+import java.util.Map;
 
 /**
  * Trait which increase the dropped loot
@@ -20,9 +25,19 @@ public class DamageBoost implements ITraitType
     final               TagKey<EntityType<?>> compatible = TagKey.create(Registries.ENTITY_TYPE, ID);
 
     /**
+     * The maximum level
+     */
+    private int                                      maxLevel  = 2;
+
+    /**
      * Appareance chance
      */
     private int chance = 6;
+
+    /**
+     * Damage increase per level
+     */
+    private float damageIncreasePerLevel = 0.2f;
 
     public DamageBoost()
     {
@@ -30,9 +45,11 @@ public class DamageBoost implements ITraitType
     }
 
     @Override
-    public void loadFromJson(final JsonElement data)
+    public void loadFromJson(final JsonObject data)
     {
-        // TODO: load data settings from json
+        maxLevel = data.get("maxlevel").getAsInt();
+        chance = data.get("weight").getAsInt();
+        damageIncreasePerLevel = data.get("damageIncreasePerLevel").getAsFloat();
     }
 
     @Override
@@ -63,10 +80,15 @@ public class DamageBoost implements ITraitType
         return false;
     }
 
+    public float damageIncreasePerLevel()
+    {
+        return damageIncreasePerLevel;
+    }
+
     @Override
     public int maxLevel()
     {
-        return 3;
+        return maxLevel;
     }
 
     @Override
