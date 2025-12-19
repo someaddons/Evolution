@@ -32,18 +32,28 @@ public abstract class EntityTraitStorageMixin implements ITraitEntity
     @Unique
     private boolean rolledTraits = false;
 
+    @Unique
     @Override
     public Map<ITraitType, ITrait> getTraits()
     {
         return traits;
     }
 
+    @Unique
     @Override
     public boolean hasTrait(final ITraitType traitType)
     {
         return traits.containsKey(traitType);
     }
 
+    @Unique
+    @Override
+    public int getTraitLevel(ITraitType traitType)
+    {
+        return traits.get(traitType).getLevel();
+    }
+
+    @Unique
     @Override
     public boolean addTraitType(final ITraitType type)
     {
@@ -64,6 +74,7 @@ public abstract class EntityTraitStorageMixin implements ITraitEntity
         return true;
     }
 
+    @Unique
     @Override
     public void removeTrait(final ITraitType traitType)
     {
@@ -73,12 +84,14 @@ public abstract class EntityTraitStorageMixin implements ITraitEntity
     @Unique
     private int combatSuccess = 0;
 
+    @Unique
     @Override
     public void addCombatSuccess(final int success)
     {
         combatSuccess += success;
     }
 
+    @Unique
     @Override
     public int getCombatSuccess()
     {
@@ -88,6 +101,7 @@ public abstract class EntityTraitStorageMixin implements ITraitEntity
     @Unique
     private long lastPlayerContact = 0;
 
+    @Unique
     @Override
     public void onPlayerContact(final long time)
     {
@@ -97,18 +111,21 @@ public abstract class EntityTraitStorageMixin implements ITraitEntity
         }
     }
 
+    @Unique
     @Override
     public long getFirstPlayerContact()
     {
         return lastPlayerContact;
     }
 
+    @Unique
     @Override
     public void rolledTraits()
     {
         rolledTraits = true;
     }
 
+    @Unique
     @Override
     public boolean hasRolledTraits()
     {
@@ -125,6 +142,8 @@ public abstract class EntityTraitStorageMixin implements ITraitEntity
             {
                 tag.put(trait.getType().getID().toString(), trait.serializeNbt());
             }
+
+            tag.putInt("combatSuccess",combatSuccess);
         }
         catch (Exception e)
         {
@@ -147,6 +166,11 @@ public abstract class EntityTraitStorageMixin implements ITraitEntity
                     this.traits.put(trait.getType(), trait);
                     trait.getType().onAddTo((Mob & ITraitEntity)(Object) this, trait);
                 }
+            }
+
+            if (tag.contains("combatSuccess"))
+            {
+                combatSuccess = tag.getInt("combatSuccess");
             }
         }
         catch (Exception e)

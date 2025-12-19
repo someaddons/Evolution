@@ -1,0 +1,5 @@
+{
+  "desc": "Gives entities extra drops when slain, aka Looting",
+  "maxlevel": 2,
+  "weight": 4
+}

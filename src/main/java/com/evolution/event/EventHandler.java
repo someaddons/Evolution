@@ -6,6 +6,7 @@ import com.evolution.network.Network;
 import com.evolution.trait.Traits;
 import com.evolution.trait.selection.EntityTraitManager;
 import com.evolution.trait.storage.ITraitEntity;
+import com.evolution.trait.storage.TraitJsonReloadListener;
 import com.evolution.trait.storage.TraitRegionLevelData;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -21,6 +22,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.*;
@@ -35,6 +37,12 @@ import java.util.Calendar;
  */
 public class EventHandler
 {
+    @SubscribeEvent
+    public static void onAddReloadListenerEvent(final AddReloadListenerEvent event)
+    {
+        event.addListener(new TraitJsonReloadListener());
+    }
+
     @SubscribeEvent
     public static void onLootTableLoad(@NotNull final LootingLevelEvent event)
     {
@@ -101,7 +109,7 @@ public class EventHandler
     {
         if (event.getSource().getEntity() instanceof ITraitEntity traitEntity && traitEntity.hasTrait(Traits.damageBoost))
         {
-            event.setAmount(event.getAmount() * (1.0f + 0.2f * traitEntity.getTraits().get(Traits.damageBoost).getLevel()));
+            event.setAmount(event.getAmount() * (1.0f + Traits.damageBoost.damageIncreasePerLevel() * traitEntity.getTraitLevel(Traits.damageBoost)));
         }
 
         if (event.getEntity() instanceof ITraitEntity traitEntity && traitEntity.hasTrait(Traits.mutant))
@@ -111,13 +119,13 @@ public class EventHandler
 
         if (event.getEntity() instanceof ITraitEntity traitEntity && traitEntity.hasTrait(Traits.darkness) && event.getSource().getEntity() instanceof Player)
         {
-            ((Player) event.getSource().getEntity()).addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 40, 0));
+            ((Player) event.getSource().getEntity()).addEffect(new MobEffectInstance(MobEffects.BLINDNESS, Traits.darkness.getDuration(), 0));
         }
 
         if (event.getEntity() instanceof ITraitEntity traitEntity && traitEntity.hasTrait(Traits.enduring))
         {
             final float maxHealth = event.getEntity().getMaxHealth();
-            final float allowedPercent = 0.45f - traitEntity.getTraits().get(Traits.enduring).getLevel() * 0.1f; // 35% 25% 15%
+            final float allowedPercent = Traits.enduring.getMaxHpLostOnHit(traitEntity.getTraitLevel(Traits.enduring)); // 35% 25% 15%
             final float allowedTotal = allowedPercent * maxHealth;
             event.setAmount(Math.min(allowedTotal, event.getAmount()));
         }
@@ -131,23 +139,23 @@ public class EventHandler
         if (event.getSource().getDirectEntity() instanceof Projectile
             && event.getEntity() instanceof ITraitEntity traitEntity && traitEntity.hasTrait(Traits.projectileProtection))
         {
-            event.setAmount(event.getAmount() * (1.0f - (0.45f * traitEntity.getTraits().get(Traits.projectileProtection).getLevel())));
+            event.setAmount(event.getAmount() * Traits.projectileProtection.getDamageModifier(traitEntity.getTraitLevel(Traits.projectileProtection)));
         }
         else if (event.getSource().is(MELEE_DAMAGE) && event.getEntity() instanceof ITraitEntity traitEntity && traitEntity.hasTrait(Traits.meleeProtection))
         {
-            event.setAmount(event.getAmount() * (1.0f - (0.25f * traitEntity.getTraits().get(Traits.meleeProtection).getLevel())));
+            event.setAmount(event.getAmount() * Traits.meleeProtection.getDamageModifier(traitEntity.getTraitLevel(Traits.meleeProtection)));
         }
 
-        if (event.getSource().getDirectEntity() == null
+        if (!(event.getSource().getEntity() instanceof LivingEntity)
             && event.getEntity() instanceof ITraitEntity traitEntity && traitEntity.hasTrait(Traits.environmentalAdaption))
         {
-            event.setAmount(event.getAmount() * (1.0f - (0.5f * traitEntity.getTraits().get(Traits.environmentalAdaption).getLevel())));
+            event.setAmount(event.getAmount() *  Traits.environmentalAdaption.getMaxEnvHpLostOnHit(traitEntity.getTraitLevel(Traits.environmentalAdaption)));
         }
 
         if (event.getSource().getEntity() instanceof LivingEntity
             && event.getEntity() instanceof ITraitEntity traitEntity && traitEntity.hasTrait(Traits.thorns))
         {
-            event.getSource().getEntity().hurt(event.getEntity().level().damageSources().magic(), traitEntity.getTraits().get(Traits.thorns).getLevel());
+            event.getSource().getEntity().hurt(event.getEntity().level().damageSources().magic(), Traits.thorns.getDamageForLevel(traitEntity.getTraitLevel(Traits.thorns)));
         }
 
         if (event.getEntity() instanceof ITraitEntity traitEntity && event.getSource().getEntity() instanceof ServerPlayer)

@@ -4,6 +4,7 @@ import com.evolution.Evolution;
 import com.evolution.trait.ITrait;
 import com.evolution.trait.storage.ITraitEntity;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -26,6 +27,11 @@ public class Generous implements ITraitType
     final               TagKey<EntityType<?>> compatible = TagKey.create(Registries.ENTITY_TYPE, ID);
 
     /**
+     * The maximum level
+     */
+    private int                                      maxLevel  = 2;
+
+    /**
      * Appareance chance
      */
     private int chance = 2;
@@ -36,9 +42,10 @@ public class Generous implements ITraitType
     }
 
     @Override
-    public void loadFromJson(final JsonElement data)
+    public void loadFromJson(final JsonObject data)
     {
-        // TODO: load data settings from json
+        maxLevel = data.get("maxlevel").getAsInt();
+        chance = data.get("weight").getAsInt();
     }
 
     @Override
@@ -73,7 +80,7 @@ public class Generous implements ITraitType
     @Override
     public int maxLevel()
     {
-        return 2;
+        return maxLevel;
     }
 
 

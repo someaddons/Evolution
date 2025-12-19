@@ -3,6 +3,7 @@ package com.evolution.trait.type;
 import com.evolution.Evolution;
 import com.evolution.trait.ITrait;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -24,6 +25,11 @@ public class Darkness implements ITraitType
     final               TagKey<EntityType<?>> compatible = TagKey.create(Registries.ENTITY_TYPE, ID);
 
     /**
+     * The blindness duration in ticks
+     */
+    private int                                      duration  = 40;
+
+    /**
      * Appareance chance
      */
     private int chance = 2;
@@ -34,9 +40,10 @@ public class Darkness implements ITraitType
     }
 
     @Override
-    public void loadFromJson(final JsonElement data)
+    public void loadFromJson(final JsonObject data)
     {
-        // TODO: load data settings from json
+        chance = data.get("weight").getAsInt();
+        duration = data.get("duration").getAsInt();
     }
 
     @Override
@@ -72,6 +79,11 @@ public class Darkness implements ITraitType
     public int maxLevel()
     {
         return 1;
+    }
+
+    public int getDuration()
+    {
+        return duration;
     }
 
     @Override

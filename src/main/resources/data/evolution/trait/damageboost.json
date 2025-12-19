@@ -1,0 +1,6 @@
+{
+  "desc": "Gives additional damage to the entity",
+  "maxlevel": 2,
+  "weight": 6,
+  "damageIncreasePerLevel": 0.2
+}

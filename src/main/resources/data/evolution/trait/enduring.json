@@ -1,0 +1,11 @@
+{
+  "desc": "Limits how much percent hp an entity can loose per hit at maximum",
+  "maxlevel": 3,
+  "weight": 5,
+  "maxhppercentlostlevels":
+  {
+    "1": 35,
+    "2": 25,
+    "3": 15
+  }
+}

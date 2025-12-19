@@ -18,7 +18,7 @@ public class CommonConfiguration implements ICommonConfig
     public static CupboardConfig<CommonConfiguration> config = new CupboardConfig<>(MOD_ID, new CommonConfiguration());
 
     public boolean displayTraitsInJadeOrWaila = true;
-    public double noTraitWeight = 2.0;
+    public double noTraitWeight = 20.0;
     public int         maxTraits       = 3;
     public Set<String> entityBlackList = new HashSet<>();
     public Set<String> traitBlackList = new HashSet<>();
@@ -37,7 +37,7 @@ public class CommonConfiguration implements ICommonConfig
         root.add("displayTraitsInJadeOrWaila", entry);
 
         final JsonObject entry2 = new JsonObject();
-        entry2.addProperty("desc:", "Set the weight of getting no trait, the higher this is the lower the probability of received a trait for the entity. default:2.0");
+        entry2.addProperty("desc:", "Set the weight of getting no trait, the higher this is the lower the probability of received a trait for the entity. Gets multiplied by the total amount of possible traits for that entity which is about x10. default:20.0");
         entry2.addProperty("noTraitWeight", noTraitWeight);
         root.add("noTraitWeight", entry2);
 

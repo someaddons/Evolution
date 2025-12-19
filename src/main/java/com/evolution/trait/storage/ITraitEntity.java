@@ -11,6 +11,8 @@ public interface ITraitEntity
 
     boolean hasTrait(ITraitType traitType);
 
+    public int getTraitLevel(ITraitType traitType);
+
     boolean addTraitType(ITraitType type);
 
     void removeTrait(ITraitType traitType);

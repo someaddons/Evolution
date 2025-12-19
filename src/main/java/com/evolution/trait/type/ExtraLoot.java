@@ -3,6 +3,7 @@ package com.evolution.trait.type;
 import com.evolution.Evolution;
 import com.evolution.trait.ITrait;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -14,6 +15,8 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.level.Level;
 
+import java.util.Map;
+
 /**
  * Trait which increase the dropped loot
  */
@@ -21,6 +24,11 @@ public class ExtraLoot implements ITraitType
 {
     public static final ResourceLocation      ID         = new ResourceLocation(Evolution.MOD_ID, "extraloot");
     final               TagKey<EntityType<?>> compatible = TagKey.create(Registries.ENTITY_TYPE, ID);
+
+    /**
+     * The maximum level
+     */
+    private int                                      maxLevel  = 2;
 
     /**
      * Appareance chance
@@ -33,9 +41,10 @@ public class ExtraLoot implements ITraitType
     }
 
     @Override
-    public void loadFromJson(final JsonElement data)
+    public void loadFromJson(final JsonObject data)
     {
-        // TODO: load data settings from json
+        maxLevel = data.get("maxlevel").getAsInt();
+        chance = data.get("weight").getAsInt();
     }
 
     @Override
@@ -75,7 +84,7 @@ public class ExtraLoot implements ITraitType
     @Override
     public int maxLevel()
     {
-        return 2;
+        return maxLevel;
     }
 
     @Override

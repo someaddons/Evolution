@@ -4,6 +4,8 @@ import com.evolution.Evolution;
 import com.evolution.trait.ITrait;
 import com.evolution.trait.storage.ITraitEntity;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +20,8 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.level.Level;
 
+import java.util.Map;
+
 /**
  * Trait which increase the dropped loot
  */
@@ -26,8 +30,15 @@ public class SpeedBoost implements ITraitType
     public static final ResourceLocation      ID         = new ResourceLocation(Evolution.MOD_ID, "speedy");
     final               TagKey<EntityType<?>> compatible = TagKey.create(Registries.ENTITY_TYPE, ID);
 
-    private static AttributeModifier SPEED_ONE = new AttributeModifier("evolution_speedy", 0.2, AttributeModifier.Operation.MULTIPLY_TOTAL);
-    private static AttributeModifier SPEED_TWO = new AttributeModifier("evolution_speedy", 0.5, AttributeModifier.Operation.MULTIPLY_TOTAL);
+    /**
+     * The attribute modifiers by level
+     */
+    private Int2ObjectOpenHashMap<AttributeModifier> modifiers = new Int2ObjectOpenHashMap<>();
+
+    /**
+     * The maximum level
+     */
+    private int                                      maxLevel  = 2;
 
     /**
      * Appareance chance
@@ -36,13 +47,21 @@ public class SpeedBoost implements ITraitType
 
     public SpeedBoost()
     {
-
+        modifiers.put(1, new AttributeModifier("evolution_speedy", 0.2, AttributeModifier.Operation.MULTIPLY_TOTAL));
+        modifiers.put(2, new AttributeModifier("evolution_speedy", 0.5, AttributeModifier.Operation.MULTIPLY_TOTAL));
     }
 
     @Override
-    public void loadFromJson(final JsonElement data)
+    public void loadFromJson(final JsonObject data)
     {
-        // TODO: load data settings from json
+        maxLevel = data.get("maxlevel").getAsInt();
+        chance = data.get("weight").getAsInt();
+        JsonObject levels = data.get("speedLevels").getAsJsonObject();
+        modifiers.clear();
+        for (final Map.Entry<String, JsonElement> level : levels.entrySet())
+        {
+            modifiers.put(Integer.valueOf(level.getKey()), new AttributeModifier("evolution_speedy", (level.getValue().getAsDouble()/100.0), AttributeModifier.Operation.MULTIPLY_TOTAL));
+        }
     }
 
     @Override
@@ -77,23 +96,17 @@ public class SpeedBoost implements ITraitType
     @Override
     public int maxLevel()
     {
-        return 2;
+        return maxLevel;
     }
 
     @Override
     public <T extends Mob & ITraitEntity> void onAddTo(T entity, ITrait iTrait)
     {
-        entity.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(SPEED_ONE);
-        entity.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(SPEED_TWO);
-
-        if (iTrait.getLevel() == 1)
+        for (final var modifier : modifiers.values())
         {
-            entity.getAttribute(Attributes.MOVEMENT_SPEED).addTransientModifier(SPEED_ONE);
+            entity.getAttribute(Attributes.ARMOR).removeModifier(modifier);
         }
-        if (iTrait.getLevel() == 2)
-        {
-            entity.getAttribute(Attributes.MOVEMENT_SPEED).addTransientModifier(SPEED_TWO);
-        }
+        entity.getAttribute(Attributes.ARMOR).addTransientModifier(modifiers.get(iTrait.getLevel()));
     }
 
     @Override

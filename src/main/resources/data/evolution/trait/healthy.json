@@ -1,0 +1,11 @@
+{
+  "desc": "Gives an entity x percent more health",
+  "maxlevel": 3,
+  "weight": 10,
+  "healthLevels":
+  {
+    "1": 20,
+    "2": 50,
+    "3": 150
+  }
+}

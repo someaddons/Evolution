@@ -50,4 +50,5 @@ public class Evolution
     // Add blacklist tags per trait
     // Move compatible entity types into tags more
     // Recheck all compatible entity types, see if some entities are left out
+    // "Weak" traits, like weakness, docile(does only attack back) etc. They will probably die out but are part of evolutionary process
 }

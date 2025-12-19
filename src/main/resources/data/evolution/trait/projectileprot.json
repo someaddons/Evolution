@@ -1,0 +1,10 @@
+{
+  "desc": "Reduces damage taken from projectiles attacks",
+  "maxlevel": 2,
+  "weight": 8,
+  "percentDamageReductionlevels":
+  {
+    "1": 45,
+    "2": 90
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "desc": "Increases an entities speed by a percentage",
+  "maxlevel": 2,
+  "weight": 7,
+  "speedLevels":
+  {
+    "1": 20,
+    "2": 50
+  }
+}
