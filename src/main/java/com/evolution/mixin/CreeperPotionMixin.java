@@ -23,7 +23,6 @@ public class CreeperPotionMixin
             org.isAmbient(),
             org.isVisible(),
             org.showIcon(),
-            null,
-            org.getEffect().createFactorData());
+            null);
     }
 }
