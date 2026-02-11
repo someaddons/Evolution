@@ -6,6 +6,7 @@
   "mixinPriority": 200,
   "mixins": [
     "AnimalFoodMixin",
+    "CreeperPotionMixin",
     "EntityDespawnMixin",
     "EntityTraitStorageMixin",
     "EternalYouthAgeMixin",
