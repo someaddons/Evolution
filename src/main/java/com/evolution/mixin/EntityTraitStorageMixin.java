@@ -1,6 +1,7 @@
 package com.evolution.mixin;
 
 import com.evolution.Evolution;
+import com.evolution.config.CommonConfiguration;
 import com.evolution.trait.DefaultTraitData;
 import com.evolution.trait.ITrait;
 import com.evolution.trait.Traits;
@@ -57,6 +58,11 @@ public abstract class EntityTraitStorageMixin implements ITraitEntity
     @Override
     public boolean addTraitType(final ITraitType type)
     {
+        if (CommonConfiguration.config.getCommonConfig().traitBlackList.contains(type.getID().toString()))
+        {
+            return false;
+        }
+
         if (!traits.containsKey(type))
         {
             traits.put(type, type.createTraitData());
@@ -163,6 +169,10 @@ public abstract class EntityTraitStorageMixin implements ITraitEntity
             {
                 for (final ITrait trait : traitSet)
                 {
+                    if (CommonConfiguration.config.getCommonConfig().traitBlackList.contains(trait.getType().getID().toString()))
+                    {
+                        continue;
+                    }
                     this.traits.put(trait.getType(), trait);
                     trait.getType().onAddTo((Mob & ITraitEntity)(Object) this, trait);
                 }

@@ -105,6 +105,22 @@ public class RegionData
     }
 
     /**
+     * Checks if empty before saving
+     * @return
+     */
+    public boolean isEmpty()
+    {
+        for(final TraitStats stats: regionTraitData.values())
+        {
+            if (stats.getSpawnCount() != 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Increases sample size
      */
     public void incSampleSize()

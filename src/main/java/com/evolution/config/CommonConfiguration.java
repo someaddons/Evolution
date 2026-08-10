@@ -59,7 +59,7 @@ public class CommonConfiguration implements ICommonConfig
 
         final JsonObject entry5 = new JsonObject();
         entry5.addProperty("desc:",
-            "List of traits which are not allowed to appear, example:  [\"evolution:armored\", \"evolution:mutant\"]");
+            "List of traits which are not allowed to appear, example:  [\"evolution:armored\", \"evolution:mutant\", \"evolution:eternalyouth\"] https://github.com/someaddons/Evolution/tree/1.21.1/src/main/resources/data/evolution/trait has the full list of traits");
         final JsonArray list5 = new JsonArray();
         for (final String name : traitBlackList)
         {

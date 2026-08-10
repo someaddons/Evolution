@@ -399,8 +399,11 @@ public class EntityTraitManager
             // Randomly add eternal youth 5%
             if (Evolution.rand.nextInt(100) <= Traits.eternalYouth.getActualChance())
             {
-                child.addTraitType(Traits.eternalYouth);
-                ((AgeableMob) child).setAge(Integer.MIN_VALUE);
+                if (!CommonConfiguration.config.getCommonConfig().traitBlackList.contains(Traits.eternalYouth.getID().toString()))
+                {
+                    child.addTraitType(Traits.eternalYouth);
+                    ((AgeableMob) child).setAge(Integer.MIN_VALUE);
+                }
             }
             return (AgeableMob) child;
         }

@@ -70,7 +70,6 @@ public class TraitRegionLevelData extends SavedData
     /**
      * Get the structure data for a given pos when a trigger update happened
      *
-     * @param level
      * @param pos
      * @return
      */
@@ -115,7 +114,7 @@ public class TraitRegionLevelData extends SavedData
         ListTag list = new ListTag();
         for (final RegionData data : traitRegionData.values())
         {
-            if (data != null)
+            if (data != null && !data.isEmpty())
             {
                 list.add(data.serializeNbt());
             }

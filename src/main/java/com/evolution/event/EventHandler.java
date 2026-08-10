@@ -126,7 +126,7 @@ public class EventHandler
         {
             final float maxHealth = event.getEntity().getMaxHealth();
             final float allowedPercent = Traits.enduring.getMaxHpLostOnHit(traitEntity.getTraitLevel(Traits.enduring)); // 35% 25% 15%
-            final float allowedTotal = allowedPercent * maxHealth;
+            final float allowedTotal = Math.max(0.5f, allowedPercent * maxHealth);
             event.setAmount(Math.min(allowedTotal, event.getAmount()));
         }
     }
